@@ -1,0 +1,378 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SharePlate | Food Sharing Marketplace</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            SharePlate<span class="brand-dot">.</span>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto align-items-lg-center {% if user.is_authenticated %} gap-lg-2 logged-in-nav {% else %} gap-lg-4 logged-out-nav {% endif %}">
+
+                {% if user.is_authenticated %}
+
+                    <a class="nav-link" href="{% url 'profile' %}">
+                        {{ user.username }}
+                    </a>
+
+                    {% if user.role == "CHARITY" %}
+                        <a class="nav-link" href="{% url 'my_pickup_requests' %}">
+                             Requests
+                        </a>
+                    {% endif %}
+
+                    {% if user.role == "VOLUNTEER" %}
+                        <a class="nav-link" href="{% url 'volunteer_dashboard' %}">
+                            Dashboard
+                        </a>
+                    {% endif %}
+
+                    {% if user.role == "DONOR" %}
+                        <a class="nav-link" href="{% url 'donor_dashboard' %}">
+                            Dashboard
+                        </a>
+
+                        <a class="nav-link" href="{% url 'manage_pickup_requests' %}">
+                            Manage Requests
+                        </a>
+
+                        <a href="{% url 'create_donation' %}"
+                           class="btn btn-green btn-sm">
+                            + Donate Food
+                        </a>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'logout' %}" class="ms-lg-2">
+                        {% csrf_token %}
+                        <button class="btn btn-light-green btn-sm" type="submit">
+                            Logout
+                        </button>
+                    </form>
+
+                {% else %}
+
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+
+                    <a href="{% url 'register' %}" class="btn btn-green btn-sm">
+                        Join SharePlate
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+<div class="container pt-3">
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-panel">
+            <div class="row align-items-center g-4">
+
+                <div class="col-lg-7">
+                    <span class="hero-tag">Share food. Spread kindness.</span>
+
+                    <h1>Good food deserves <br>a second chance.</h1>
+
+                    <p>
+                        Connect with your community, rescue surplus food
+                        and help make every meal count. A simple way to
+                        share more and waste less.
+                    </p>
+
+                    {% if user.is_authenticated and user.role == "DONOR" %}
+                        <a href="{% url 'create_donation' %}"
+                           class="btn btn-light-green mt-3">
+                            Donate Food
+                        </a>
+                    {% else %}
+                        <a href="#marketplace" class="btn btn-light-green mt-3">
+                            Discover Available Food
+                        </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="col-lg-5">
+                   <img src="{% static 'images/pic.png' %}"
+                      alt="Fresh food"
+                      class="hero-image">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="market-section" id="marketplace">
+    <div class="container">
+
+        <div class="mb-4 text-center">
+            <span class="eyebrow">Discover and share</span>
+            <h2 class="section-title mt-2">Explore available food</h2>
+            <p class="text-secondary">
+                Find surplus food shared by donors in your community.
+            </p>
+        </div>
+
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-6">
+                <div class="search-box">
+                    <input type="search" id="foodSearch"
+                           placeholder="Search food by name or location...">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+            <button class="filter-btn active" data-filter="all">
+                All Donations
+            </button>
+            <button class="filter-btn" data-filter="rice">
+                Rice & Meals
+            </button>
+            <button class="filter-btn" data-filter="vegetables">
+                Vegetables
+            </button>
+            <button class="filter-btn" data-filter="fruits">
+                Fruits
+            </button>
+            <button class="filter-btn" data-filter="other">
+                Other Food
+            </button>
+        </div>
+
+        <div class="row food-grid" id="foodGrid">
+
+            {% for donation in donations %}
+
+                <div class="col-md-6 col-lg-4 food-item"
+                    data-name="{{ donation.food_name|lower }}"
+                    data-location="{{ donation.pickup_address|lower }}">
+
+                    <article class="food-card">
+
+                        {% if donation.image %}
+                        <img src="{{ donation.image.url }}"
+                        alt="{{ donation.food_name }}"
+                        class="food-image">
+                        {% else %}
+                        <div class="food-placeholder"></div>
+                        {% endif %}
+
+                        <div class="food-content">
+
+                            <span class="available">● Available</span>
+
+                            <h3>{{ donation.food_name }}</h3>
+
+                            <p class="food-description">
+                                {{ donation.description|default:"Surplus food available for pickup." }}
+                            </p>
+
+                            <hr>
+
+                            <p class="food-info">
+                                <strong>Quantity:</strong>
+                                {{ donation.quantity }} {{ donation.get_quantity_unit_display }}
+                            </p>
+
+                            <p class="food-info">
+                                <strong>Pickup location:</strong><br>
+                                {{ donation.pickup_address }}
+                            </p>
+
+                            <p class="food-info">
+                                <strong>Pickup deadline:</strong><br>
+                                {{ donation.pickup_deadline|date:"d M Y, H:i" }}
+                            </p>
+
+                            {% if user.is_authenticated and user.role == "CHARITY" %}
+
+                                {% if user.is_verified %}
+
+                                    <form method="post"
+                                          action="{% url 'request_pickup' donation.id %}">
+                                        {% csrf_token %}
+
+                                        <button type="submit"
+                                                class="btn btn-green w-100 mt-2">
+                                            Request Pickup
+                                        </button>
+                                    </form>
+
+                                {% else %}
+
+                                    <div class="alert alert-warning small mt-3 mb-0">
+                                        Your charity account needs verification
+                                        before requesting food.
+                                    </div>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                        </div>
+                    </article>
+                </div>
+
+            {% empty %}
+
+                <div class="col-12" id="emptyDonations">
+                    <div class="empty-state text-center">
+                        <h5 class="section-title fs-9 ">
+                            No donations available yet
+                        </h5>
+                        <p class="text-secondary mb-0">
+                            New food donations will appear here when shared.
+                        </p>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <p id="noSearchResults" class="text-center text-secondary mt-4"
+           style="display:none;">
+            No matching food donations found.
+        </p>
+
+    </div>
+</section>
+
+
+<section class="how-section" id="how-it-works">
+    <div class="container">
+
+        <div class="text-center how-heading">
+            <span class="eyebrow">Simple process</span>
+            <h2 class="section-title mt-2">How SharePlate works</h2>
+            <p>Making food sharing simple, one step at a time.</p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="how-card">
+                    <div class="how-card-top">
+                        <span class="how-number">01</span>
+                        <span class="how-label">DONATE</span>
+                    </div>
+
+                    <h3>Donors share food</h3>
+                    <p>
+                        Donors list their surplus food with quantity,
+                        pickup address and collection deadline.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="how-card">
+                    <div class="how-card-top">
+                        <span class="how-number">02</span>
+                        <span class="how-label">REQUEST</span>
+                    </div>
+
+                    <h3>Charities request</h3>
+                    <p>
+                        Verified charities browse available donations
+                        and request the food they need.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="how-card">
+                    <div class="how-card-top">
+                        <span class="how-number">03</span>
+                        <span class="how-label">DELIVER</span>
+                    </div>
+
+                    <h3>Food gets shared</h3>
+                    <p>
+                        Volunteers deliver approved donations to charities,
+                        who confirm when the food is received.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="row align-items-center g-3">
+
+            <div class="col-md-7">
+                <span class="navbar-brand text-white">
+                    SharePlate<span class="brand-dot">.</span>
+                </span>
+
+                <p class="small mb-0 mt-2">
+                    Sharing food, building a caring community.
+                </p>
+            </div>
+
+            <div class="col-md-5 text-md-end">
+                <a href="{% url 'home' %}">Home</a>
+                <span class="mx-2">|</span>
+                <a href="#marketplace">Food Hub</a>
+                <span class="mx-2">|</span>
+                <a href="#how-it-works">How It Works</a>
+
+                <p class="small mt-3 mb-0">
+                    &copy; {% now "Y" %} SharePlate. All rights reserved.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{% static 'js/home.js' %}"></script>
+
+</body>
+</html>

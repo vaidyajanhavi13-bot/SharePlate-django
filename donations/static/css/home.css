@@ -1,0 +1,499 @@
+
+body {
+    background: #f7f7f0;
+    color: #26372c;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.navbar {
+    background: white;
+    border-bottom: 1px solid #e9ede6;
+    padding: 16px 0;
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    color: #28543b !important;
+    font-size: 29px;
+    font-weight: 700;
+}
+
+.brand-dot {
+    color: #d59b45;
+}
+
+.nav-link {
+    color: #526357;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.nav-link:hover {
+    color: #f6a505;
+}
+
+.btn-green {
+    background-color: #E8EDE4;
+    color: #174B3B;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 700;
+}
+.btn-green:hover {
+    background-color: #E8EDE4;
+    color: #174B3B;
+}
+
+.btn-light-green {
+    background: #e8eee5;
+    color: #28543b;
+    border: 1px solid #e8eee5;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 700;
+}
+
+.btn-light-green:hover,
+.btn-light-green:focus,
+.btn-light-green:active {
+    background: #e8eee5 !important;
+    color: #28543b !important;
+    border-color: #e8eee5 !important;
+    box-shadow: none !important;
+}
+
+.hero {
+    padding: 65px 0 55px;
+}
+
+.hero-panel {
+    background: #597136;
+    color: white;
+    border-radius: 22px;
+    padding: 55px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-tag {
+    color: #d8c48d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 5vw, 59px);
+    line-height: 1.15;
+    margin: 18px 0;
+}
+
+.hero p {
+    color: #d7e2d9;
+    line-height: 1.8;
+    max-width: 490px;
+}
+
+.hero-image {
+    width: 110%;
+    height: 325px;
+    max-width: 650px;
+    object-fit: cover;
+    transform: translateX(-55px);
+    border-radius: 16px;
+}
+
+.market-section {
+    padding: 25px 0 44px;
+}
+
+.eyebrow {
+    color: #7b906e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.section-title {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 36px;
+    color: #193b29;
+}
+
+.market-section .text-secondary{
+    color:black;
+    font-size: 17px;
+    font-family:monospace;
+}
+
+.search-box {
+    background: white;
+    border: 1px solid #e2e8df;
+    border-radius: 12px;
+    padding: 9px 14px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 7px;
+    background: transparent;
+}
+
+.filter-btn {
+    border: 1px solid #dce5d9;
+    background: white;
+    color: #58675a;
+    border-radius: 30px;
+    padding: 8px 17px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #28543b;
+    color: white;
+    border-color: #28543b;
+}
+
+.food-card {
+    background: white;
+    border: 1px solid #e9ede6;
+    border-radius: 19px;
+    overflow: hidden;
+    height: 100%;
+    transition: .2s ease;
+}
+
+.food-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(31, 65, 43, .09);
+}
+
+.food-image,
+.food-placeholder {
+    width: 100%;
+    height: 220px;
+}
+
+.food-image {
+    display: block;
+    object-fit: cover;
+}
+
+.food-placeholder {
+    background: #f7f7f0;
+}
+
+.food-content {
+    padding: 20px;
+}
+
+.available {
+    display: inline-block;
+    color: #347246;
+    background: #e8f3e8;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.food-content h3 {
+    font-family: 'Playfair Display', serif;
+    color: #193b29;
+    font-size: 22px;
+    margin: 13px 0 8px;
+}
+
+.food-description {
+    color: #778178;
+    font-size: 13px;
+    min-height: 40px;
+}
+
+.food-info {
+    color: #56645a;
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+.food-info strong {
+    color: #26372c;
+}
+
+.empty-state {
+    background: white;
+    border: 1px solid #e2e8df;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    max-width: 850px;
+    margin: 20px auto;
+}
+
+.empty-state h5 {
+    color: #034f27;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #778178;
+    font-size: 19px;
+    margin-bottom: 0;
+    font-family:Arial,  Helvetica, sans-serif;
+     font-weight: 700;
+}
+
+.food-grid {
+    --bs-gutter-x: 3rem;
+    --bs-gutter-y: 3rem;
+}
+
+.how-section {
+    background: #e8eee5;
+    padding: 65px 0 75px;
+}
+
+.how-heading {
+    margin-bottom: 38px;
+}
+
+.how-heading p {
+    color: #778178;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.how-card {
+    background: #ffffff;
+    border: 1px solid #e5eae2;
+    border-radius: 14px;
+    padding: 28px;
+    min-height: 225px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(31, 65, 43, 0.035);
+}
+
+.how-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 17px;
+    margin-bottom: 23px;
+    border-bottom: 1px solid #edf0e9;
+}
+
+.how-number {
+    color: #28543b;
+    font-family: 'Manrope', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.how-label {
+    color: #8b9988;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.how-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 600;
+    color: #193b29;
+    margin-bottom: 12px;
+}
+
+.how-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #778178;
+    line-height: 1.8;
+    margin-bottom: 0;
+}
+
+
+footer {
+    background: #193b29;
+    color: #dce7dd;
+    padding: 35px 0;
+}
+
+footer a {
+    color: #d8c48d;
+    text-decoration: none;
+}
+
+footer .navbar-brand {
+    color: #e3e2e2 !important;
+}
+
+
+@media (max-width: 768px) {
+
+ .hero {
+        padding-top: 23px;
+        padding-bottom: 30px;
+    } 
+
+    .how-section {
+        padding: 50px 0;
+        padding-top: 40px;
+    }
+
+    .how-heading {
+        margin-bottom: 28px;
+    }
+
+    .how-card {
+        min-height: auto;
+        padding: 24px;
+    }    
+
+    .hero-panel {
+        padding: 30px 22px;
+    }
+
+    .hero-panel .btn {
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+   .hero-image {
+        display: block;
+        width: 90%;
+        max-width: 100%;
+        height: 210px;
+        object-fit: cover;
+        transform: none;
+        margin: 20px auto 0;
+    }
+    .section-title {
+        font-size: 29px;
+    }
+
+    .market-section {
+         padding-top: 10px;
+    }
+
+    .food-card {
+        width: 94%;
+        margin: 0 auto;
+    }
+
+    .food-image,
+    .food-placeholder {
+        height: 175px;
+    }
+
+    .food-content {
+        padding: 15px;
+    }
+
+    .food-content h3 {
+        margin: 10px 0 6px;
+    }
+
+    .food-info {
+        margin: 8px 0;
+    }
+
+    footer .container {
+        text-align: center;
+    }
+
+    footer .navbar-brand {
+        display: inline-block;
+    }
+
+    footer .text-start,
+    footer .text-end {
+        text-align: center !important;
+    }
+
+    footer .d-flex {
+        justify-content: center !important;
+    }
+
+}
+
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+        padding: 8px 0;
+    }
+
+    .logged-in-nav form .btn-light-green {
+        font-size: 17px;
+    }
+
+    .logged-out-nav {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: center;
+        align-items: center !important;
+        gap: 20px !important;
+        padding: 10px 0;
+    }
+
+    .logged-out-nav .btn {
+        width: auto;
+        white-space: nowrap;
+    }
+
+    .logged-in-nav {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 3px !important;
+        padding: 5px 0;
+    }
+
+    .logged-in-nav .nav-link {
+        padding: 0 !important;
+        margin: 0 !important;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .logged-in-nav form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 0 !important;
+    }
+
+    .logged-in-nav > a.btn,
+    .logged-in-nav form button {
+        width: 40%;
+        max-width: 190px;
+        padding: 9px 14px;
+        font-size: 15px;
+}
+}
+
+.navbar-brand {
+    animation: brandEntrance 0.9s ease-out both;
+}
+
+
+@keyframes brandEntrance {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

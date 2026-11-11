@@ -1,0 +1,39 @@
+
+.btn-success,
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background-color: #3F704D !important;
+    border-color: #3F704D !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+.btn-outline-secondary,
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+    background-color: transparent !important;
+    border-color: #6c757d !important;
+    color: #6c757d !important;
+    box-shadow: none !important;
+}
+
+.card {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    text-decoration: none;
+    color: #53616A;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #53616A;
+}

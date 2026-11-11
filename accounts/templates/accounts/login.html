@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | SharePlate</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+    <div class="container login-container">
+        <div class="card login-card">
+            <div class="card-body">
+                <h1 class="h3 login-title mb-2"> Welcome Back </h1>
+                <p class="login-subtitle"> Log in to SharePlate. </p>
+                <form method="post"> {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Your username or password is incorrect.
+                            Please try again.
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">
+                            Username
+                        </label>
+
+                        <input type="text"
+                        name="username"
+                        id="id_username"
+                        class="form-control"
+                        value="{{ form.username.value|default:'' }}"
+                        required
+                        autocomplete="username">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">
+                            Password
+                        </label>
+
+                        <input type="password"
+                               name="password"
+                               id="id_password"
+                               class="form-control"
+                               required
+                               autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-login">
+                        Log In
+                    </button>
+                </form>
+
+                <p class="text-center mt-4 mb-0 register-text">
+                    Don't have an account?
+                    <a href="{% url 'register' %}"
+                       class="register-link">
+                        Register
+                    </a>
+                </p>
+
+                <a href="/"
+                   class="d-block text-center mt-3 register-link">
+                    ← Back to homepage
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Manage Pickup Requests | SharePlate</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/manage_pickup_requests.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <span class="navbar-brand">SharePlate</span>
+            <a href="/" class="btn btn-outline-light btn-sm px-3">
+                Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <main class="container page-container">
+
+        <div class="mb-4">
+            <h1 class="page-title mb-2">Manage Pickup Requests</h1>
+
+            <p class="page-subtitle mb-0">
+                Review charity requests and monitor food delivery progress.
+            </p>
+        </div>
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="section-heading mb-0">Pickup Requests</h2>
+
+            <span class="request-count">
+                {{ pickup_requests|length }} Requests
+            </span>
+        </div>
+
+
+        {% if pickup_requests %}
+
+            <div class="table-container d-none d-lg-block">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Charity</th>
+                                <th>Quantity</th>
+                                <th>Request Status</th>
+                                <th>Volunteer</th>
+                                <th>Delivery Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in pickup_requests %}
+
+                                <tr>
+                                    <td>
+                                        <span class="food-name">
+                                            {{ item.donation.food_name }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {{ item.requester.username }}
+                                    </td>
+
+                                    <td>
+                                        <span class="quantity-text">
+                                            {{ item.donation.quantity }} portions
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if item.status == "COMPLETED" %}
+                                            <span class="status completed">
+                                                {{ item.get_status_display }}
+                                            </span>
+
+                                        {% elif item.status == "REJECTED" %}
+                                            <span class="status rejected">
+                                                {{ item.get_status_display }}
+                                            </span>
+
+                                        {% elif item.status == "APPROVED" %}
+                                            <span class="status approved">
+                                                {{ item.get_status_display }}
+                                            </span>
+
+                                        {% else %}
+                                            <span class="status pending">
+                                                {{ item.get_status_display }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if item.volunteer %}
+                                            {{ item.volunteer.username }}
+                                        {% else %}
+                                            <span class="text-muted">
+                                                Not assigned
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if item.delivery_status == "CONFIRMED" %}
+                                            <span class="status completed">
+                                                {{ item.get_delivery_status_display }}
+                                            </span>
+
+                                        {% elif item.delivery_status == "DELIVERED" %}
+                                            <span class="status approved">
+                                                {{ item.get_delivery_status_display }}
+                                            </span>
+
+                                            <span class="delivery-note">
+                                                Awaiting charity confirmation
+                                            </span>
+
+                                        {% elif item.delivery_status == "COLLECTED" %}
+                                            <span class="status approved">
+                                                {{ item.get_delivery_status_display }}
+                                            </span>
+
+                                        {% elif item.delivery_status == "ASSIGNED" or item.delivery_status == "AVAILABLE" %}
+                                            <span class="status pending">
+                                                {{ item.get_delivery_status_display }}
+                                            </span>
+
+                                        {% elif item.status == "REJECTED" %}
+                                            <span class="status rejected">
+                                                Not applicable
+                                            </span>
+
+                                        {% else %}
+                                            <span class="status neutral">
+                                                Not started
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if item.status == "PENDING" %}
+
+                                            <div class="action-buttons">
+
+                                                <form method="post" action="{% url 'decide_pickup_request' item.id %}"> {% csrf_token %}
+                                                    <input type="hidden"
+                                                           name="action"
+                                                           value="approve">
+
+                                                    <button type="submit"
+                                                            class="approve-btn">
+                                                        Approve
+                                                    </button>
+                                                </form>
+
+
+                                                <form method="post" action="{% url 'decide_pickup_request' item.id %}"> {% csrf_token %}
+                                                    <input type="hidden"
+                                                           name="action"
+                                                           value="reject">
+
+                                                    <button type="submit"
+                                                            class="reject-btn">
+                                                        Reject
+                                                    </button>
+                                                </form>
+
+                                            </div>
+
+                                        {% elif item.status == "APPROVED" %}
+
+                                            <span class="action-label in-progress">
+                                                In Progress
+                                            </span>
+
+                                        {% elif item.status == "COMPLETED" %}
+
+                                            <span class="action-label finished">
+                                                Completed
+                                            </span>
+
+                                        {% elif item.status == "REJECTED" %}
+
+                                            <span class="action-label closed">
+                                                Closed
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- MOBILE AND TABLET CARDS -->
+            <div class="mobile-request-list d-lg-none">
+
+                {% for item in pickup_requests %}
+
+                    <article class="request-card">
+
+                        <div class="request-card-header">
+
+                            <h3 class="request-food-name">
+                                {{ item.donation.food_name }}
+                            </h3>
+
+                            {% if item.status == "COMPLETED" %}
+                                <span class="status completed">
+                                    {{ item.get_status_display }}
+                                </span>
+
+                            {% elif item.status == "REJECTED" %}
+                                <span class="status rejected">
+                                    {{ item.get_status_display }}
+                                </span>
+
+                            {% elif item.status == "APPROVED" %}
+                                <span class="status approved">
+                                    {{ item.get_status_display }}
+                                </span>
+
+                            {% else %}
+                                <span class="status pending">
+                                    {{ item.get_status_display }}
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="request-details">
+
+                            <div class="request-detail detail-left">
+                                <span>Charity</span>
+
+                                <strong>
+                                    {{ item.requester.username }}
+                                </strong>
+                            </div>
+
+                            <div class="request-detail detail-right">
+                                <span>Quantity</span>
+
+                                <strong>
+                                    {{ item.donation.quantity }} portions
+                                </strong>
+                            </div>
+
+                            <div class="request-detail detail-left">
+                                <span>Volunteer</span>
+
+                                <strong>
+                                    {% if item.volunteer %}
+                                        {{ item.volunteer.username }}
+                                    {% else %}
+                                        Not assigned
+                                    {% endif %}
+                                </strong>
+                            </div>
+
+                            <div class="request-detail detail-right">
+
+                                <span>Delivery Status</span>
+
+                                {% if item.delivery_status == "CONFIRMED" %}
+                                    <span class="status completed">
+                                        {{ item.get_delivery_status_display }}
+                                    </span>
+
+                                {% elif item.delivery_status == "DELIVERED" %}
+                                    <span class="status approved">
+                                        {{ item.get_delivery_status_display }}
+                                    </span>
+
+                                    <span class="delivery-note">
+                                        Awaiting charity confirmation
+                                    </span>
+
+                                {% elif item.delivery_status == "COLLECTED" %}
+                                    <span class="status approved">
+                                        {{ item.get_delivery_status_display }}
+                                    </span>
+
+                                {% elif item.delivery_status == "ASSIGNED" or item.delivery_status == "AVAILABLE" %}
+                                    <span class="status pending">
+                                        {{ item.get_delivery_status_display }}
+                                    </span>
+
+                                {% elif item.status == "REJECTED" %}
+                                    <span class="status rejected">
+                                        Not applicable
+                                    </span>
+
+                                {% else %}
+                                    <span class="status neutral">
+                                        Not started
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        {% if item.status == "PENDING" %}
+
+                            <div class="request-card-action">
+
+                                <form method="post" action="{% url 'decide_pickup_request' item.id %}"> {% csrf_token %}
+
+                                    <input type="hidden"
+                                           name="action"
+                                           value="approve">
+
+                                    <button type="submit"
+                                            class="approve-btn">
+                                        Approve
+                                    </button>
+
+                                </form>
+
+
+                                <form method="post" action="{% url 'decide_pickup_request' item.id %}">{% csrf_token %}
+
+                                    <input type="hidden"
+                                           name="action"
+                                           value="reject">
+
+                                    <button type="submit"
+                                            class="reject-btn">
+                                        Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% endif %}
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+        
+            <div class="empty-state">
+
+                <h3>No pickup requests yet</h3>
+
+                <p class="mb-0">
+                    Requests from charities will appear here when they request your food.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+    </main>
+
+    <footer class="footer">
+        <p>SharePlate · Connecting surplus food with those who need it.</p>
+    </footer>
+
+</body>
+</html>

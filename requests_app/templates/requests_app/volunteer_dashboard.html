@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Volunteer Dashboard | SharePlate</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/volunteer_dashboard.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <span class="navbar-brand">SharePlate</span>
+            <a href="/" class="btn btn-outline-light btn-sm px-3">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="container dashboard-container">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info message-alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <section class="dashboard-section" id="available-tasks">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Available Delivery Tasks</h2>
+                    <p>Choose a task and make a difference in your community.</p>
+                </div>
+
+                <span class="task-count">{{ available_tasks|length }} Available</span>
+            </div>
+
+
+            <div class="row g-4">
+
+                {% for task in available_tasks %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="task-card h-100">
+
+                            <div class="task-card-top">
+                                <span class="task-icon">↗</span>
+                                <span class="task-badge available-badge">Available</span>
+                            </div>
+
+                            <h3>{{ task.donation.food_name }}</h3>
+
+                            <div class="task-details">
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Quantity</span>
+                                    <span class="detail-value">
+                                        {{ task.donation.quantity }} portions
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Pickup Address</span>
+                                    <span class="detail-value">
+                                        {{ task.donation.pickup_address }}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Pickup Deadline</span>
+                                    <span class="detail-value">
+                                        {{ task.donation.pickup_deadline|date:"d M Y, H:i" }}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Charity</span>
+                                    <span class="detail-value">
+                                        {{ task.requester.username }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <form method="POST" action="{% url 'accept_delivery' task.id %}">
+                                {% csrf_token %}
+
+                                <button type="submit" class="primary-btn w-100">
+                                    Accept Delivery →
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="col-12">
+                        <div class="empty-state">
+                            <h3>No Available Tasks</h3>
+                            <p>New delivery opportunities will appear here when they are ready.</p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </section>
+
+
+        <section class="dashboard-section" id="my-deliveries">
+
+            <div class="section-heading">
+                <div>
+                    <h2>My Assigned Tasks</h2>
+                    <p>View and update the deliveries you have accepted.</p>
+                </div>
+
+                <span class="task-count assigned-count">
+                    {{ my_tasks|length }} Assigned
+                </span>
+            </div>
+
+
+            <div class="row g-4">
+
+                {% for task in my_tasks %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="task-card assigned-task-card h-100">
+
+                            <div class="task-card-top">
+
+                                <span class="task-badge
+                                    {% if task.delivery_status == 'ASSIGNED' %}assigned-badge
+                                    {% elif task.delivery_status == 'COLLECTED' %}collected-badge
+                                    {% elif task.delivery_status == 'DELIVERED' %}delivered-badge
+                                    {% elif task.delivery_status == 'CONFIRMED' %}confirmed-badge
+                                    {% else %}available-badge{% endif %}">
+
+                                    {{ task.get_delivery_status_display }}
+
+                                </span>
+                            </div>
+
+                            <h3>{{ task.donation.food_name }}</h3>
+
+                            <div class="task-details">
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Quantity</span>
+                                    <span class="detail-value">
+                                        {{ task.donation.quantity }} portions
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Pickup Address</span>
+                                    <span class="detail-value">
+                                        {{ task.donation.pickup_address }}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Charity</span>
+                                    <span class="detail-value">
+                                        {{ task.requester.username }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="task-action">
+
+                                {% if task.delivery_status == "ASSIGNED" %}
+
+                                    <form method="POST" action="{% url 'update_delivery_status' task.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="collected">
+
+                                        <button type="submit" class="primary-btn w-100">
+                                            Mark as Collected →
+                                        </button>
+                                    </form>
+
+                                {% elif task.delivery_status == "COLLECTED" %}
+
+                                    <form method="POST" action="{% url 'update_delivery_status' task.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delivered">
+
+                                        <button type="submit" class="primary-btn w-100">
+                                            Mark as Delivered →
+                                        </button>
+                                    </form>
+
+                                {% elif task.delivery_status == "DELIVERED" %}
+
+                                    <div class="delivery-message waiting-message">
+                                        Waiting for charity confirmation.
+                                    </div>
+
+                                {% elif task.delivery_status == "CONFIRMED" %}
+
+                                    <div class="delivery-message success-message">
+                                        ✓ Delivery completed successfully!
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="col-12">
+                        <div class="empty-state">
+                            <div class="empty-icon">+</div>
+                            <h3>No Assigned Tasks Yet</h3>
+                            <p>Tasks you accept will appear here.</p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </section>
+
+
+        <footer class="dashboard-footer">
+            <p>SharePlate · Connecting surplus food with those who need it.</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

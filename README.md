@@ -4,6 +4,10 @@
 A responsive Django-based food-sharing platform that connects food donors, charities, and volunteers to reduce food waste and help distribute surplus food to people in need.
 </p>
 
+<p align="center">
+  <a href="https://shareplate-czx6.onrender.com">Live Demo</a>
+</p>
+
 ---
 
 ## 📌 Table of Contents
@@ -79,10 +83,16 @@ A responsive Django-based food-sharing platform that connects food donors, chari
 
 ### Database
 - SQLite (Local Development)
-- PostgreSQL (Production, if configured)
+- PostgreSQL (Production – Neon)
 
-### Other Technologies
-- Pillow (Image Handling)
+### Image Storage
+- Cloudinary
+
+### Deployment & Other Tool
+- Render
+- Gunicorn
+- WhiteNoise
+- Pillow 
 - Django Authentication System
 - Git & GitHub
 - VS Code
@@ -122,20 +132,27 @@ SharePlate/
 │
 ├── requests_app/
 │
+├── screenshots/
+│
 ├── shareplate/
+│   ├── __pycache__/
+│   ├── __init__.py
+│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
-│   ├── asgi.py
-│   ├── wsgi.py
-│   └── ...
+│   └── wsgi.py
+│
+├── staticfiles/
 │
 ├── venv/
 │
+├── .env
 ├── .gitignore
 ├── db.sqlite3
 ├── manage.py
+├── README.md
 ├── requirements.txt
-└── README.md
+└── upload_images.py
 ```
 
 ---
@@ -150,6 +167,45 @@ SharePlate/
 <img src="screenshots/home.png" width="900">
 </p>
 
+<br><br>
+
+---
+
+<h3>Donor – Manage Requests</h3>
+
+<br>
+
+<p align="center">
+<img src="screenshots/donor-manage-requests.png" width="900">
+</p>
+
+<br><br>
+
+---
+
+<h3>Charity – Requests</h3>
+
+<br>
+
+<p align="center">
+  <img src="screenshots/charity-requests.png" width="900">
+</p>
+
+<br><br>
+
+---
+
+<h3>Volunteer Dashboard</h3>
+
+<br>
+
+<p align="center">
+  <img src="screenshots/volunteer-dashboard.png" width="900">
+</p>
+
+<br><br>
+
+
 ---
 
 ## <a id="installation"></a> Installation
@@ -163,7 +219,7 @@ git clone https://github.com/vaidyajanhavi13-bot/SharePlate-django.git
 ### 2. Navigate to the Project Folder
 
 ```bash
-cd shareplate
+cd SharePlate-django
 ```
 
 ### 3. Create a Virtual Environment
@@ -192,13 +248,21 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 6. Apply Database Migrations
+### 6. Configure Environment Variables
+Create a `.env` file in the project root directory and add:
+
+```env
+SECRET_KEY=your_django_secret_key
+DEBUG=True
+```
+
+### 7. Apply Database Migrations
 
 ```bash
 python manage.py migrate
 ```
 
-### 7. Start the Development Server
+### 8. Start the Development Server
 
 ```bash
 python manage.py runserver
@@ -228,6 +292,9 @@ While building SharePlate, I gained practical experience with:
 - Volunteer Delivery Management
 - Django Templates
 - Responsive Web Design
+- PostgreSQL Database Integration
+- Cloud-Based Image Storage
+- Deployment with Render
 - Git & GitHub
 
 ---

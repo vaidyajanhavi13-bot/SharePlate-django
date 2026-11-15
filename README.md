@@ -1,4 +1,4 @@
-# 🍽️ SharePlate – Food Sharing Platform
+<h1 align="center">🍽️ SharePlate – Food Sharing Platform </h1>
 
 <p align="center">
 A responsive Django-based food-sharing platform that connects food donors, charities, and volunteers to reduce food waste and help distribute surplus food to people in need.
